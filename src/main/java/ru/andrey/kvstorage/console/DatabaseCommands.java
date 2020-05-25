@@ -1,9 +1,9 @@
 package ru.andrey.kvstorage.console;
 
-import ru.andrey.kvstorage.commands.CreateDatabase;
-import ru.andrey.kvstorage.commands.CreateTable;
-import ru.andrey.kvstorage.commands.UpdateKey;
-import ru.andrey.kvstorage.commands.ReadKey;
+import ru.andrey.kvstorage.commands.CreateDatabaseCommand;
+import ru.andrey.kvstorage.commands.CreateTableCommand;
+import ru.andrey.kvstorage.commands.UpdateKeyCommand;
+import ru.andrey.kvstorage.commands.ReadKeyCommand;
 import ru.andrey.kvstorage.exception.DatabaseException;
 
 public enum DatabaseCommands {
@@ -14,7 +14,7 @@ public enum DatabaseCommands {
                 throw new DatabaseException("Command CREATE_DATABASE must have 1 argument");
             }
 
-            return new CreateDatabase(env, args[0]);
+            return new CreateDatabaseCommand(env, args[0]);
         }
     },
     CREATE_TABLE {
@@ -24,7 +24,7 @@ public enum DatabaseCommands {
                 throw new DatabaseException("Command CREATE_TABLE must have 2 arguments");
             }
 
-            return new CreateTable(env, args[0], args[1]);
+            return new CreateTableCommand(env, args[0], args[1]);
         }
     },
     UPDATE_KEY {
@@ -34,7 +34,7 @@ public enum DatabaseCommands {
                 throw new DatabaseException("Command UPDATE_KEY must have 4 arguments");
             }
 
-            return new UpdateKey(env, args[0], args[1], args[2], args[3]);
+            return new UpdateKeyCommand(env, args[0], args[1], args[2], args[3]);
         }
     },
     READ_KEY {
@@ -44,7 +44,7 @@ public enum DatabaseCommands {
                 throw new DatabaseException("Command READ_KEY must have 3 arguments");
             }
 
-            return new ReadKey(env, args[0], args[1], args[2]);
+            return new ReadKeyCommand(env, args[0], args[1], args[2]);
         }
     };
 

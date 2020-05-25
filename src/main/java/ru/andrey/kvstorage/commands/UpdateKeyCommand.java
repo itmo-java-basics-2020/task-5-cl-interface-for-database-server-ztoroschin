@@ -8,7 +8,7 @@ import ru.andrey.kvstorage.logic.Database;
 
 import java.util.Optional;
 
-public class UpdateKey implements DatabaseCommand {
+public class UpdateKeyCommand implements DatabaseCommand {
 
     private final ExecutionEnvironment env;
     private final String databaseName;
@@ -16,7 +16,7 @@ public class UpdateKey implements DatabaseCommand {
     private final String key;
     private final String value;
 
-    public UpdateKey(ExecutionEnvironment env, String databaseName, String tableName, String key, String value) {
+    public UpdateKeyCommand(ExecutionEnvironment env, String databaseName, String tableName, String key, String value) {
         this.env = env;
         this.databaseName = databaseName;
         this.tableName = tableName;
@@ -25,18 +25,15 @@ public class UpdateKey implements DatabaseCommand {
     }
 
     @Override
-    public DatabaseCommandResult execute() {
+    public DatabaseCommandResult execute() throws DatabaseException {
         Optional<Database> database = env.getDatabase(databaseName);
         if (database.isEmpty()) {
             return DatabaseCommandResult.error("Database doesn't exists");
         }
 
-        try {
-            String previousValue = database.get().read(tableName, key);
-            database.get().write(tableName, key, value);
-            return DatabaseCommandResult.success(previousValue);
-        } catch (DatabaseException e) {
-            return DatabaseCommandResult.error(e.getMessage());
-        }
+        String previousValue = database.get().read(tableName, key);
+        database.get().write(tableName, key, value);
+
+        return DatabaseCommandResult.success(previousValue);
     }
 }

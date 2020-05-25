@@ -8,30 +8,27 @@ import ru.andrey.kvstorage.logic.Database;
 
 import java.util.Optional;
 
-public class CreateTable implements DatabaseCommand {
+public class ReadKeyCommand implements DatabaseCommand {
 
     private final ExecutionEnvironment env;
     private final String databaseName;
     private final String tableName;
+    private final String key;
 
-    public CreateTable(ExecutionEnvironment env, String databaseName, String tableName) {
+    public ReadKeyCommand(ExecutionEnvironment env, String databaseName, String tableName, String key) {
         this.env = env;
         this.databaseName = databaseName;
         this.tableName = tableName;
+        this.key = key;
     }
 
     @Override
-    public DatabaseCommandResult execute() {
+    public DatabaseCommandResult execute() throws DatabaseException {
         Optional<Database> database = env.getDatabase(databaseName);
         if (database.isEmpty()) {
             return DatabaseCommandResult.error("Database doesn't exists");
         }
 
-        try {
-            database.get().createTableIfNotExists(tableName);
-        } catch (DatabaseException e) {
-            return DatabaseCommandResult.error(e.getMessage());
-        }
-        return DatabaseCommandResult.success(tableName);
+        return DatabaseCommandResult.success(database.get().read(tableName, key));
     }
 }
